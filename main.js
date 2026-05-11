@@ -16,6 +16,13 @@ const URL_CLASSIC = "https://app.gather.town/";
 // Determine URL based on startup flags
 let GATHER_URL = process.argv.includes("--classic") ? URL_CLASSIC : URL_V2;
 
+// --v2-space <value> appends /app/<value> to the V2 URL
+const spaceIdx = process.argv.indexOf("--v2-space");
+if (spaceIdx !== -1 && spaceIdx + 1 < process.argv.length) {
+  const space = process.argv[spaceIdx + 1];
+  GATHER_URL = URL_V2 + "app/" + space;
+}
+
 // DISABLE THE NATIVE MENU
 Menu.setApplicationMenu(null);
 
