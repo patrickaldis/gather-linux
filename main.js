@@ -105,6 +105,33 @@ function createWindow() {
       "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
   });
 
+  // --- AUTO-CLICK JOIN BUTTON ---
+  win.webContents.on("did-finish-load", () => {
+    win.webContents
+      .executeJavaScript(
+        `
+      (function() {
+        let attempts = 0;
+        const maxAttempts = 50; // Poll for up to ~10 seconds
+        const interval = setInterval(() => {
+          attempts++;
+          const buttons = Array.from(document.querySelectorAll('button'));
+          const joinBtn = buttons.find(b => b.textContent && b.textContent.trim() === 'Join');
+          if (joinBtn) {
+            joinBtn.click();
+            console.log("Auto-clicked Join button");
+            clearInterval(interval);
+          } else if (attempts >= maxAttempts) {
+            clearInterval(interval);
+          }
+        }, 200);
+      })();
+      `,
+      )
+      .catch((err) => console.log("Auto-Join Error:", err));
+  });
+  // ------------------------------
+
   // --- AUTO AWAY ON SUSPEND ---
   powerMonitor.on("suspend", () => {
     console.log("System suspending...");
