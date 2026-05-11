@@ -31,7 +31,10 @@
             
             # 2. Copy the main files
             cp main.js package.json $out/libexec/gather-linux/
-            # Copy the assets
+            # Copy the assets (needed at runtime for tray icon)
+            mkdir -p $out/libexec/gather-linux/assets
+            cp assets/icon.png $out/libexec/gather-linux/assets/icon.png
+            # Also install to standard icon location for desktop integration
             cp assets/icon.png $out/share/icons/hicolor/512x512/apps/gather-linux.png
 
             # 3. Create the binary wrapper
