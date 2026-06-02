@@ -23,6 +23,9 @@ if (spaceIdx !== -1 && spaceIdx + 1 < process.argv.length) {
   GATHER_URL = URL_V2 + "app/" + space;
 }
 
+// Set app name for libnotify on Linux
+app.setName("Gather");
+
 // DISABLE THE NATIVE MENU
 Menu.setApplicationMenu(null);
 
@@ -167,12 +170,26 @@ function createWindow() {
         "media",
         "accessibility-events",
         "display-capture",
+        "notifications",
       ];
       if (allowedPermissions.includes(permission)) {
         callback(true);
       } else {
         callback(false);
       }
+    },
+  );
+
+  // Allow synchronous permission checks (e.g. Notification.permission)
+  session.defaultSession.setPermissionCheckHandler(
+    (webContents, permission) => {
+      const allowedPermissions = [
+        "media",
+        "accessibility-events",
+        "display-capture",
+        "notifications",
+      ];
+      return allowedPermissions.includes(permission);
     },
   );
 
