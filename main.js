@@ -32,6 +32,7 @@ Menu.setApplicationMenu(null);
 let tray = null;
 let mainWindow = null;
 let isQuitting = false;
+const startHidden = process.argv.includes("--background");
 
 function createTray() {
   // Resolve the icon path relative to the app directory
@@ -85,6 +86,7 @@ function createWindow() {
     height: 800,
     title: "Gather",
     icon: iconPath,
+    show: !startHidden,
     autoHideMenuBar: true,
     webPreferences: {
       nodeIntegration: false,
